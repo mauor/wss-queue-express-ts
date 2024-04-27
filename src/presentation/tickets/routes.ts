@@ -1,12 +1,14 @@
 import { Router } from "express";
 import { TicketController } from "./constructor";
 import { TicketService } from "../services/ticket.service";
+import { WssService } from "../services/wss.service";
 
 export class TicketRoutes{
     static get routes(){
         const router = Router();
 
-        const ticketService = new TicketService();
+        const wssService = WssService.instance;
+        const ticketService = new TicketService( wssService );
 
         const controller = new TicketController( ticketService );
 
@@ -16,7 +18,7 @@ export class TicketRoutes{
         router.post('/', controller.createTicket );
         router.get('/draw/:desk', controller.drawTicket );
         router.put('/done/:ticketId', controller.ticketFinished );
-        router.get('/workin-on', controller.workingOn );
+        router.get('/working-on', controller.workingOn );
 
         return router;
     }
